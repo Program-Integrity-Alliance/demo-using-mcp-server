@@ -376,13 +376,3 @@ deactivate
 - **Issues**: Open an issue on the GitHub repository
 - **Questions**: Check the troubleshooting section above
 
-## Contributing
-
-Have improvements or additional examples? Contributions are welcome!
-
-1. Create your example script
-2. Add comprehensive documentation
-3. Include a `requirements.txt` if needed
-4. Update this README
-5. Submit a pull request
-
