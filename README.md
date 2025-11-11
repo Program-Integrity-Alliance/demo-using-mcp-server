@@ -25,7 +25,7 @@ This example shows how to connect to the PIA MCP Server, discover available tool
 - `MultiServerMCPClient` with `streamable_http` transport for remote MCP servers
 - `create_agent` from LangChain 1.0 for modern agent creation
 - Automatic tool discovery and conversion to LangChain tools
-- Works seamlessly with any tool-calling LLM (OpenAI, Azure, Claude)
+- Works with any tool-calling LLM (OpenAI, Azure, Claude)
 
 ## Quick Start
 
@@ -34,9 +34,6 @@ This example shows how to connect to the PIA MCP Server, discover available tool
 Using a virtual environment keeps dependencies isolated:
 
 ```bash
-# Navigate to the examples directory
-cd examples
-
 # Create a virtual environment
 python3 -m venv venv
 
@@ -56,15 +53,6 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-This installs:
-- `langchain` - Core LangChain framework
-- `langchain-core` - LangChain core components
-- `langchain-mcp-adapters` - Official MCP integration for LangChain
-- `langgraph` - Graph-based agent framework
-- `langchain-openai` - OpenAI and Azure OpenAI support
-- `langchain-anthropic` - Claude/Anthropic support
-- `python-dotenv` - Environment variable management
-
 ### 3. Configure Environment Variables
 
 ```bash
@@ -81,7 +69,7 @@ code .env  # VS Code
 ```
 
 **Required variables:**
-- `PIA_API_KEY` - Get from https://mcp.programintegrity.org/register
+- `PIA_API_KEY` - Get from [https://mcp.programintegrity.org/get-api-key](https://mcp.programintegrity.org/get-api-key). If you don't have a PIA Community account, follow the links to create one
 - `LLM_PROVIDER` - Choose: `openai`, `azure`, or `claude`
 - Provider-specific API keys (see env.example for details)
 
@@ -95,17 +83,12 @@ You only need to configure one LLM provider, but feel free to set up multiple fo
 python langchain_mcp_example.py
 
 # Or run with your own query:
-python langchain_mcp_example.py "Search for fraud recommendations from GAO"
+python langchain_mcp_example.py "What is ambulance fraud?"
 
 # Another example:
-python langchain_mcp_example.py "Find recent cybersecurity reports from OIG"
+python langchain_mcp_example.py "Find recent cybersecurity reports from OIGs"
 ```
 
-### 5. Deactivate Virtual Environment (When Done)
-
-```bash
-# When you're finished, deactivate the virtual environment:
-deactivate
 ```
 
 ## LLM Provider Setup
@@ -135,7 +118,7 @@ AZURE_OPENAI_API_VERSION=2024-02-15-preview  # optional
 **Setup Requirements:**
 1. Azure subscription
 2. Azure OpenAI resource created in Azure Portal
-3. Model deployment (GPT-4, GPT-3.5-turbo, etc.)
+3. Model deployment (GPT-5, GPT-5-mini, etc.)
 4. Get credentials from: https://portal.azure.com
 
 ### Claude (Anthropic)

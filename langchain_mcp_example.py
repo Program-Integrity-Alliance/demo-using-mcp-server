@@ -68,7 +68,7 @@ def create_llm(provider: str = "openai") -> Any:
             raise ValueError("ANTHROPIC_API_KEY environment variable is required")
 
         return ChatAnthropic(
-            model=os.getenv("ANTHROPIC_MODEL", "claude-3-5-sonnet-20241022"),
+            model=os.getenv("ANTHROPIC_MODEL"),
             anthropic_api_key=api_key,
             temperature=0,  # Use 0 for more deterministic responses
         )
@@ -139,6 +139,8 @@ IMPORTANT INSTRUCTIONS:
 5. If tool results show documents, describe them to the user
 6. Include specific details like titles, agencies, and dates from the results
 7. Never say "no results" if the tool returned data with a positive total_count
+
+You Must provide inline citations to any sources you use.
 
 Use the available tools to search for government audit recommendations, reports, and integrity data."""
     )
