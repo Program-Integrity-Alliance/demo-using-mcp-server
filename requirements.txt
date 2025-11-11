@@ -1,0 +1,18 @@
+# LangChain MCP Integration Example - Requirements
+# Install with: pip install -r requirements.txt
+
+# Core dependencies
+langchain>=0.3.0
+langchain-core>=0.3.0
+python-dotenv>=1.0.0
+
+# MCP integration (official LangChain MCP adapters)
+langchain-mcp-adapters>=0.1.0
+langgraph>=1.0.0
+
+# LLM Provider integrations (install the ones you need)
+# OpenAI (standard and Azure)
+langchain-openai>=0.2.0
+
+# Anthropic (Claude)
+langchain-anthropic>=0.2.0
