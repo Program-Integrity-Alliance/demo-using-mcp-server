@@ -68,7 +68,7 @@ def create_llm(provider: str = "openai") -> Any:
             raise ValueError("ANTHROPIC_API_KEY environment variable is required")
 
         return ChatAnthropic(
-            model=os.getenv("ANTHROPIC_MODEL"),
+            model=os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-5-20250929"),
             anthropic_api_key=api_key,
             temperature=0,  # Use 0 for more deterministic responses
         )
