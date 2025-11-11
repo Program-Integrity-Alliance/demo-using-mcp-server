@@ -5,6 +5,7 @@
 langchain>=0.3.0
 langchain-core>=0.3.0
 python-dotenv>=1.0.0
+certifi>=2023.0.0
 
 # MCP integration (official LangChain MCP adapters)
 langchain-mcp-adapters>=0.1.0
@@ -16,3 +17,5 @@ langchain-openai>=0.2.0
 
 # Anthropic (Claude)
 langchain-anthropic>=0.2.0
+
+# Note: Hugging Face uses the OpenAI-compatible API via langchain-openai (no additional package needed)

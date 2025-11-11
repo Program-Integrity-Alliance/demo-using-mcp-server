@@ -8,16 +8,25 @@ using the official langchain-mcp-adapters package.
 The example shows:
 - Connecting to remote MCP server via streamable_http
 - Automatic tool discovery using MultiServerMCPClient
-- Support for multiple LLM providers (OpenAI, Azure OpenAI, Claude)
+- Support for multiple LLM providers (OpenAI, Azure OpenAI, Claude, Hugging Face)
 - Creating AI agents with MCP tools using create_agent
 
 Requirements:
 - See README.md for environment variable setup
 """
 
-import asyncio
 import os
 import sys
+
+# CRITICAL: Set SSL environment variables BEFORE any imports that use SSL/HTTPS
+# This fixes SSL certificate issues with aiohttp (used by huggingface_hub)
+# Must be done before importing certifi or any other SSL-using libraries
+import certifi
+os.environ['SSL_CERT_FILE'] = certifi.where()
+os.environ['REQUESTS_CA_BUNDLE'] = certifi.where()
+
+import asyncio
+import ssl
 from typing import Any
 
 from dotenv import load_dotenv
@@ -25,6 +34,9 @@ from langchain.agents import create_agent
 from langchain_anthropic import ChatAnthropic
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_openai import AzureChatOpenAI, ChatOpenAI
+
+# Additional SSL fix for synchronous requests
+ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
 
 # Load environment variables from .env file
 load_dotenv()
@@ -62,7 +74,7 @@ def create_llm(provider: str = "openai") -> Any:
             temperature=0,  # Use 0 for more deterministic responses
         )
 
-    elif provider == "claude":
+    elif provider == "anthropic":
         api_key = os.getenv("ANTHROPIC_API_KEY")
         if not api_key:
             raise ValueError("ANTHROPIC_API_KEY environment variable is required")
@@ -73,9 +85,25 @@ def create_llm(provider: str = "openai") -> Any:
             temperature=0,  # Use 0 for more deterministic responses
         )
 
+    elif provider == "huggingface":
+        # HuggingFace can use either HF_TOKEN or HUGGINGFACE_API_KEY
+        api_key = os.getenv("HF_TOKEN") or os.getenv("HUGGINGFACE_API_KEY")
+        if not api_key:
+            raise ValueError("HF_TOKEN or HUGGINGFACE_API_KEY environment variable is required")
+
+        # Use ChatOpenAI with HuggingFace Router (OpenAI-compatible API)
+        # HuggingFace Router supports OpenAI-compatible endpoints
+        # Note: Model must support function calling for agents to work
+        return ChatOpenAI(
+            model=os.getenv("HUGGINGFACE_MODEL", "Qwen/Qwen2.5-72B-Instruct"),
+            openai_api_key=api_key,
+            openai_api_base="https://router.huggingface.co/v1",
+            temperature=0,
+        )
+
     else:
         raise ValueError(
-            f"Unknown provider: {provider}. Use 'openai', 'azure', or 'claude'"
+            f"Unknown provider: {provider}. Use 'openai', 'azure', 'claude', or 'huggingface'"
         )
 
 
@@ -214,10 +242,6 @@ Use the available tools to search for government audit recommendations, reports,
 
     print("✅ Example complete!")
     print()
-    print("💡 Tips:")
-    print("   - Pass your own query as a command-line argument")
-    print("   - Modify the script to build more complex agent workflows")
-    print("   - Check the README.md for more information")
 
 
 if __name__ == "__main__":

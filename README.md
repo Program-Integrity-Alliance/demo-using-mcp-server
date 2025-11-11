@@ -2,15 +2,17 @@
 
 This directory contains example scripts demonstrating how to integrate the PIA MCP Server with LangChain and various LLM providers.
 
+You can find out more about PIA's MCP Server [here](https://programintegrity.org/connect/)
+
 ## LangChain MCP Integration Example
 
-This example shows how to connect to the PIA MCP Server, discover available tools, and use them with AI agents powered by OpenAI, Azure OpenAI, or Claude models.
+This example shows how to connect to the PIA MCP Server, discover available tools, and use them with AI agents powered by OpenAI, Azure OpenAI, Claude, or Hugging Face models.
 
 ### Features
 
 - **Remote MCP Connection**: Connect to the PIA MCP server via HTTP/SSE using official `langchain-mcp-adapters`
 - **Dynamic Tool Discovery**: Automatically discover and load all available MCP tools
-- **Multiple LLM Support**: Works with OpenAI, Azure OpenAI, and Claude (Anthropic) models
+- **Multiple LLM Support**: Works with OpenAI, Azure OpenAI, Claude (Anthropic), and Hugging Face models
 - **LangChain Integration**: Seamlessly integrate MCP tools with LangChain agents using modern LangChain 1.0 API
 - **Example Queries**: Includes working examples for common use cases
 
@@ -70,7 +72,7 @@ code .env  # VS Code
 
 **Required variables:**
 - `PIA_API_KEY` - Get from [https://mcp.programintegrity.org/get-api-key](https://mcp.programintegrity.org/get-api-key). If you don't have a PIA Community account, follow the links to create one
-- `LLM_PROVIDER` - Choose: `openai`, `azure`, or `claude`
+- `LLM_PROVIDER` - Choose: `openai`, `azure`, `claude`, or `huggingface`
 - Provider-specific API keys (see env.example for details)
 
 You only need to configure one LLM provider, but feel free to set up multiple for comparison.
@@ -124,7 +126,7 @@ AZURE_OPENAI_API_VERSION=2024-02-15-preview  # optional
 ### Claude (Anthropic)
 
 ```bash
-LLM_PROVIDER=claude
+LLM_PROVIDER=anthropic
 ANTHROPIC_API_KEY=sk-ant-...your-anthropic-api-key...
 CLAUDE_MODEL=claude-3-5-sonnet-20241022  # optional
 ```
@@ -135,11 +137,20 @@ CLAUDE_MODEL=claude-3-5-sonnet-20241022  # optional
 
 ```bash
 LLM_PROVIDER=huggingface
-HUGGINGFACE_API_KEY=hf_...your-huggingface-token...
-HUGGINGFACE_MODEL=meta-llama/Llama-3.3-70B-Instruct  # optional
+# Use either HF_TOKEN (preferred) or HUGGINGFACE_API_KEY
+HF_TOKEN=hf_...your-huggingface-token...
+# Default model: Qwen/Qwen2.5-72B-Instruct
+HUGGINGFACE_MODEL=Qwen/Qwen2.5-72B-Instruct
 ```
 
 **Get API Key:** https://huggingface.co/settings/tokens
+
+**Important:** The HuggingFace model you choose **must support function calling/tool use** for agents to work properly. Recommended models that support function calling:
+- `Qwen/Qwen2.5-72B-Instruct` (default, excellent performance)
+- `Qwen/Qwen2.5-7B-Instruct` (smaller, faster)
+- `mistralai/Mixtral-8x7B-Instruct-v0.1`
+
+Note: Many Llama models do not support function calling through the HuggingFace Router API.
 
 ## What the Example Does
 
